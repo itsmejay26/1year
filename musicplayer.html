@@ -47,14 +47,13 @@
       to { opacity: 1; }
     }
 
-    .player-container {
-      width: 350px;
-      height: 500px;
-      border: 1px solid white;
-      border-radius: 20px;
-      position: relative;
-      background: white;
-    }
+    .player-container {  
+  position: relative;  
+  width: 350px;  
+  height: 500px;  
+  border: 1px solid white;  
+  border-radius: 20px;  
+}  
 
     .music-disc {
       width: 300px;
@@ -330,110 +329,114 @@
   <!-- Overlay Page to Load -->
   <iframe id="overlayPage"></iframe>
 
-  <script>
-    const songs = [
-      { title: "The Only Exception", artist: "Paramore", albumArtUrl: "https://i.ibb.co/J1w0HGR/IMG-20250622-200554.jpg", file: "The Only Exception.mp3" },
-      { title: "About You", artist: "The 1975", albumArtUrl: "https://i.imgur.com/xNWsF4p.jpg", file: "About You.mp3" },
-      { title: "The Side of Paradise", artist: "Coyote Theory", albumArtUrl: "https://i.imgur.com/Iw0uq5x.jpg", file: "The Side of Paradise.mp3" },
-      { title: "No.1 Party Anthem", artist: "Arctic Monkeys", albumArtUrl: "https://i.imgur.com/Ubz3U9V.jpg", file: "No.1 Party Anthem.mp3" },
-      { title: "Anaheim", artist: "Niki", albumArtUrl: "https://i.imgur.com/dfKFXvM.jpg", file: "Anaheim.mp3" }
-    ];
+<script>
+  const songs = [
+    { title: "The Only Exception", artist: "Paramore", albumArtUrl: "https://i.ibb.co/J1w0HGR/IMG-20250622-200554.jpg", file: "The Only Exception.mp3" },
+    { title: "About You", artist: "The 1975", albumArtUrl: "https://i.imgur.com/xNWsF4p.jpg", file: "About You.mp3" },
+    { title: "The Side of Paradise", artist: "Coyote Theory", albumArtUrl: "https://i.imgur.com/Iw0uq5x.jpg", file: "The Side of Paradise.mp3" },
+    { title: "No.1 Party Anthem", artist: "Arctic Monkeys", albumArtUrl: "https://i.imgur.com/Ubz3U9V.jpg", file: "No.1 Party Anthem.mp3" },
+    { title: "Anaheim", artist: "Niki", albumArtUrl: "https://i.imgur.com/dfKFXvM.jpg", file: "Anaheim.mp3" }
+  ];
 
-    const musicDisc = document.getElementById('musicDisc');
-    const songSelection = document.getElementById('songSelection');
-    const playerInterface = document.getElementById('playerInterface');
-    const albumArt = document.getElementById('albumArt');
-    const songTitle = document.getElementById('songTitle');
-    const songArtist = document.getElementById('songArtist');
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    const spinningDisc = document.getElementById('spinningDisc');
-    const progress = document.getElementById('progress');
-    const currentTimeEl = document.getElementById('currentTime');
-    const totalTimeEl = document.getElementById('totalTime');
-    const progressBar = document.getElementById('progressBar');
-    const audioPlayer = document.getElementById('audioPlayer');
-    const overlayPage = document.getElementById('overlayPage');
+  const musicDisc = document.getElementById('musicDisc');
+  const songSelection = document.getElementById('songSelection');
+  const playerInterface = document.getElementById('playerInterface');
+  const albumArt = document.getElementById('albumArt');
+  const songTitle = document.getElementById('songTitle');
+  const songArtist = document.getElementById('songArtist');
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const spinningDisc = document.getElementById('spinningDisc');
+  const progress = document.getElementById('progress');
+  const currentTimeEl = document.getElementById('currentTime');
+  const totalTimeEl = document.getElementById('totalTime');
+  const progressBar = document.getElementById('progressBar');
+  const audioPlayer = document.getElementById('audioPlayer');
+  const overlayPage = document.getElementById('overlayPage');
 
-    let currentSongIndex = 0;
+  let currentSongIndex = 0;
 
-    document.getElementById('doneBtn').addEventListener('click', () => {
-      overlayPage.style.display = 'block';
-      overlayPage.src = 'final.html'; // make sure this file exists in same folder
-    });
+  document.getElementById('doneBtn').addEventListener('click', () => {
+    overlayPage.style.display = 'block';
+    overlayPage.src = 'final.html';
+  });
 
-    musicDisc.onclick = () => {
-      musicDisc.style.display = 'none';
-      songSelection.classList.add('active');
+  musicDisc.onclick = () => {
+    musicDisc.style.display = 'none';
+    songSelection.classList.add('active');
+  };
+
+  document.querySelectorAll('.song-item').forEach((item, i) => {
+    item.onclick = () => {
+      playSong(i);
+      songSelection.classList.remove('active');
+      playerInterface.classList.add('active');
     };
+  });
 
-    document.querySelectorAll('.song-item').forEach((item, i) => {
-      item.onclick = () => {
-        playSong(i);
-        songSelection.classList.remove('active');
-        playerInterface.classList.add('active');
-      };
-    });
-
-    playPauseBtn.onclick = () => {
-      if (audioPlayer.paused) {
-        audioPlayer.play();
-        playPauseBtn.textContent = '⏸';
-        spinningDisc.style.display = 'flex';
-        spinningDisc.classList.add('spinning');
-      } else {
-        audioPlayer.pause();
-        playPauseBtn.textContent = '▶';
-        spinningDisc.classList.remove('spinning');
-      }
-    };
-
-    document.getElementById('prevBtn').onclick = () => {
-      currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
-      playSong(currentSongIndex);
-    };
-
-    document.getElementById('nextBtn').onclick = () => {
-      currentSongIndex = (currentSongIndex + 1) % songs.length;
-      playSong(currentSongIndex);
-    };
-
-    document.getElementById('backBtn').onclick = () => {
-      audioPlayer.pause();
-      playerInterface.classList.remove('active');
-      songSelection.classList.add('active');
-    };
-
-    progressBar.addEventListener('click', (e) => {
-      const rect = progressBar.getBoundingClientRect();
-      const percent = (e.clientX - rect.left) / rect.width;
-      audioPlayer.currentTime = percent * audioPlayer.duration;
-    });
-
-    function playSong(i) {
-      currentSongIndex = i;
-      const song = songs[i];
-      audioPlayer.src = `favsongs/${song.file}`;
+  playPauseBtn.onclick = () => {
+    if (audioPlayer.paused) {
       audioPlayer.play();
-      songTitle.textContent = song.title;
-      songArtist.textContent = song.artist;
-      albumArt.style.backgroundImage = `url(${song.albumArtUrl})`;
       playPauseBtn.textContent = '⏸';
       spinningDisc.style.display = 'flex';
       spinningDisc.classList.add('spinning');
+    } else {
+      audioPlayer.pause();
+      playPauseBtn.textContent = '▶';
+      spinningDisc.classList.remove('spinning');
     }
+  };
 
-    audioPlayer.ontimeupdate = () => {
-      const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-      progress.style.width = percent + '%';
-      currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
-      totalTimeEl.textContent = formatTime(audioPlayer.duration);
-    };
+  document.getElementById('prevBtn').onclick = () => {
+    currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+    playSong(currentSongIndex);
+  };
 
-    function formatTime(s) {
-      const m = Math.floor(s / 60);
-      const sec = Math.floor(s % 60).toString().padStart(2, '0');
-      return `${m}:${sec}`;
-    }
-  </script>
-</body>
-        </html>
+  document.getElementById('nextBtn').onclick = () => {
+    currentSongIndex = (currentSongIndex + 1) % songs.length;
+    playSong(currentSongIndex);
+  };
+
+  document.getElementById('backBtn').onclick = () => {
+    audioPlayer.pause();
+    playerInterface.classList.remove('active');
+    songSelection.classList.add('active');
+  };
+
+  progressBar.addEventListener('click', (e) => {
+    const rect = progressBar.getBoundingClientRect();
+    const percent = (e.clientX - rect.left) / rect.width;
+    audioPlayer.currentTime = percent * audioPlayer.duration;
+  });
+
+  function playSong(i) {
+    currentSongIndex = i;
+    const song = songs[i];
+    audioPlayer.src = `favsongs/${song.file}`;
+    audioPlayer.play();
+    songTitle.textContent = song.title;
+    songArtist.textContent = song.artist;
+    albumArt.style.backgroundImage = `url(${song.albumArtUrl})`;
+    playPauseBtn.textContent = '⏸';
+    spinningDisc.style.display = 'flex';
+    spinningDisc.classList.add('spinning');
+  }
+
+  audioPlayer.ontimeupdate = () => {
+    const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+    progress.style.width = percent + '%';
+    currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+    totalTimeEl.textContent = formatTime(audioPlayer.duration);
+  };
+
+  // 👇 This part makes songs auto-play one after another
+  audioPlayer.onended = () => {
+    currentSongIndex = (currentSongIndex + 1) % songs.length;
+    playSong(currentSongIndex);
+  };
+
+  function formatTime(s) {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60).toString().padStart(2, '0');
+    return `${m}:${sec}`;
+  }
+</script>
