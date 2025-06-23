@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Music Disc Player</title>
+  <script>
+  if (window !== window.top) {
+    // If musicplayer.html is loaded inside an iframe, stop it
+    window.top.location = window.location.href;
+  }
+</script>
   <style>
     * {
       margin: 0;
@@ -330,6 +336,7 @@
   <iframe id="overlayPage"></iframe>
 
 <script>
+  
   const songs = [
     { title: "The Only Exception", artist: "Paramore", albumArtUrl: "https://i.ibb.co/J1w0HGR/IMG-20250622-200554.jpg", file: "The Only Exception.mp3" },   
     { title: "The Side of Paradise", artist: "Coyote Theory", albumArtUrl: "https://i.imgur.com/Iw0uq5x.jpg", file: "The Side of Paradise.mp3" },            
