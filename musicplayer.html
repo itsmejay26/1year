@@ -376,7 +376,7 @@
   playPauseBtn.onclick = () => {
     if (audioPlayer.paused) {
       audioPlayer.play();
-      playPauseBtn.textContent = '⏸';
+      playPauseBtn.textContent = '❚❚';
       spinningDisc.style.display = 'flex';
       spinningDisc.classList.add('spinning');
     } else {
@@ -416,7 +416,7 @@
     songTitle.textContent = song.title;
     songArtist.textContent = song.artist;
     albumArt.style.backgroundImage = `url(${song.albumArtUrl})`;
-    playPauseBtn.textContent = '⏸';
+    playPauseBtn.textContent = '❚❚';
     spinningDisc.style.display = 'flex';
     spinningDisc.classList.add('spinning');
   }
