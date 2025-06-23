@@ -47,10 +47,22 @@
       animation-fill-mode: forwards;
       animation-timing-function: ease-in-out;
     }
+
+    #overlayPage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: none;
+      z-index: 2;
+    }
   </style>
 </head>
 <body>
   <div id="message"></div>
+  <iframe id="overlayPage"></iframe>
 
   <script>
     const texts = [
@@ -73,12 +85,14 @@
     ];
 
     const messageEl = document.getElementById("message");
+    const overlayPage = document.getElementById("overlayPage");
+
     let index = 0;
 
     function showNextMessage() {
       if (index >= texts.length) {
-        // Redirect to next HTML
-        window.location.href = 'envelope.html';
+        overlayPage.style.display = 'block';
+        overlayPage.src = 'envelope.html'; // Changed to envelope.html
         return;
       }
 
@@ -88,7 +102,7 @@
       messageEl.textContent = text;
       messageEl.style.animationDuration = duration + 'ms';
       messageEl.classList.remove('fade');
-      void messageEl.offsetWidth; // Trigger reflow
+      void messageEl.offsetWidth;
       messageEl.classList.add('fade');
 
       setTimeout(showNextMessage, duration + 800);
