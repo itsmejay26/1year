@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our Memories</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ffc0cb, #dda0dd);
+    }
+    .modal {
+      width: 360px;
+      max-width: 90%;
+      background: #f48fb1;
+      border-radius: 12px;
+      margin: 40px auto;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .modal-body {
+      padding: 16px;
+      text-align: center;
+      position: relative;
+    }
+    .modal-body h1 {
+      margin-top: 0;
+      color: #fff;
+      font-size: 18px;
+      letter-spacing: 1px;
+    }
+    .camera {
+      width: 150px;
+      height: 130px;
+      margin: 0 auto;
+      background: url('https://i.ibb.co/FLMt6Rwv/toppng-com-fashion-minimalist-shooting-camera-vector-clip-art-polaroid-camera-1131x1031.png') no-repeat center/contain;
+    }
+    .roll {
+      margin-top: -10px;
+      height: 280px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 8px;
+    }
+    .polaroid {
+      background: #fff;
+      margin: 12px 0;
+      width: 120px;
+      padding: 4px 4px 24px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      border: 2px solid #fff;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+    .polaroid img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .sticker {
+      position: absolute;
+      width: 60px;
+      height: auto;
+      pointer-events: none;
+    }
+
+    .preview-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      flex-direction: column;
+    }
+    .preview-overlay img {
+      max-width: 80%;
+      max-height: 60vh;
+      margin-bottom: 12px;
+      border-radius: 12px;
+    }
+    .preview-overlay button {
+      background: #fff;
+      border: none;
+      padding: 8px 16px;
+      margin: 4px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="modal">
+    <div class="modal-body">
+      <h1>OUR MEMORIES</h1>
+      <div class="camera"></div>
+      <div class="roll" id="roll"></div>
+
+      <!-- Stickers -->
+<!-- LEFT SIDE -->
+<img src="https://media.giphy.com/media/74puocrZ6WYOiNIfWU/giphy.gif" class="sticker" style="top: 20px; left: 10px; width: 80px;">
+<img src="https://media.giphy.com/media/OP4C9oeeSVIrwgFNAk/giphy.gif" class="sticker" style="top: 140px; left: 10px; width: 80px;">
+<img src="https://media.giphy.com/media/JRP94VfPBWm40CKYMO/giphy.gif" class="sticker" style="bottom: 140px; left: 10px; width: 80px;">
+<img src="https://media.giphy.com/media/1wLXYOh3trpXIHXka5/giphy.gif" class="sticker" style="bottom: 20px; left: 10px; width: 80px;">
+
+<!-- RIGHT SIDE -->
+<img src="https://media.giphy.com/media/PPWO3lTV6U05WZooJX/giphy.gif" class="sticker" style="top: 20px; right: 10px; width: 80px;">
+<img src="https://media.giphy.com/media/QfMvbpEDTDGppc5ceO/giphy.gif" class="sticker" style="top: 140px; right: 10px; width: 80px;">
+<img src="https://media.giphy.com/media/eLv7gJpxqiQtbNNQUe/giphy.gif" class="sticker" style="bottom: 140px; right: 10px; width: 80px;">
+<img src="https://media.giphy.com/media/kiC7Ia2XndA8CbYwGv/giphy.gif" class="sticker" style="bottom: 20px; right: 10px; width: 80px;">
+    </div>
+  </div>
+
+  <!-- Image Preview Modal -->
+  <div class="preview-overlay" id="previewOverlay">
+    <img id="previewImg" src="" alt="Preview">
+    <button onclick="downloadImage()">Download</button>
+    <button onclick="closePreview()">Close</button>
+  </div>
+
+  <script>
+    const roll = document.getElementById('roll');
+    const previewOverlay = document.getElementById('previewOverlay');
+    const previewImg = document.getElementById('previewImg');
+
+    // Load images from photos folder
+    const photoCount = 6; // change to the number of images you have in the folder
+    const imageList = [];
+    for (let i = 1; i <= photoCount; i++) {
+      imageList.push(`photos/${i}.jpg`); // rename your images 1.jpg, 2.jpg, etc.
+    }
+
+    // Shuffle images randomly
+    imageList.sort(() => Math.random() - 0.5);
+
+    // Display images
+    imageList.forEach(url => {
+      const poly = document.createElement('div');
+      poly.className = 'polaroid';
+      const img = document.createElement('img');
+      img.src = url;
+      img.alt = 'Memory';
+      img.onclick = () => showPreview(url);
+      poly.appendChild(img);
+      roll.appendChild(poly);
+    });
+
+    function showPreview(url) {
+      previewImg.src = url;
+      previewOverlay.style.display = 'flex';
+    }
+
+    function closePreview() {
+      previewOverlay.style.display = 'none';
+    }
+
+    function downloadImage() {
+      const a = document.createElement('a');
+      a.href = previewImg.src;
+      a.download = previewImg.src.split('/').pop();
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // Auto scroll
+    let autoScrollTimeout;
+    let resumeTimeout;
+    let isAutoScrolling = false;
+
+    function autoScrollStep() {
+      const first = roll.querySelector('.polaroid');
+      if (!first) return;
+      const items = roll.querySelectorAll('.polaroid');
+      isAutoScrolling = true;
+      const step = first.offsetHeight + parseInt(getComputedStyle(first).marginTop) + parseInt(getComputedStyle(first).marginBottom);
+      const currentIndex = Math.round(roll.scrollTop / step);
+      const nextIndex = (currentIndex + 1) % items.length;
+
+      roll.scrollTo({ top: nextIndex * step, behavior: 'smooth' });
+      setTimeout(() => { isAutoScrolling = false; }, 500);
+      autoScrollTimeout = setTimeout(autoScrollStep, 2000);
+    }
+
+    function startAutoScroll() {
+      clearTimeout(autoScrollTimeout);
+      autoScrollTimeout = setTimeout(autoScrollStep, 2000);
+    }
+
+    function stopAutoScroll() {
+      clearTimeout(autoScrollTimeout);
+    }
+
+    function handleManual() {
+      if (isAutoScrolling) return;
+      stopAutoScroll();
+      clearTimeout(resumeTimeout);
+      resumeTimeout = setTimeout(startAutoScroll, 5000);
+    }
+
+    roll.addEventListener('wheel', handleManual);
+    roll.addEventListener('touchstart', handleManual);
+
+    startAutoScroll();
+  </script>
+</body>
+</html>
