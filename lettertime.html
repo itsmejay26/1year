@@ -63,7 +63,7 @@
 <body>
   <div id="message"></div>
   <iframe id="overlayPage"></iframe>
-  <audio id="audioPlayer" src="favsongs/The Only Exception.mp3"></audio>
+  <audio id="audioPlayer" src="favsongs/The Only Exception.mp3" autoplay loop></audio>
 
   <script>
     const texts = [
@@ -94,7 +94,7 @@
       if (index >= texts.length) {
         // All messages done, load next HTML
         overlayPage.style.display = 'block';
-        overlayPage.src = 'envelope.html';
+        overlayPage.src = 'messageletter.html'; // Auto load this page
         return;
       }
 
