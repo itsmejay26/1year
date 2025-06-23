@@ -1,117 +1,119 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Letter Time!</title>
-  <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap" rel="stylesheet" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #ffc0cb, #dda0dd);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Shadows Into Light', cursive;
-      color: white;
-      overflow: hidden;
-      position: relative;
-    }
-
-    #message {
-      font-size: 1.6rem;
-      text-align: center;
-      opacity: 0;
-      padding: 0 20px;
-      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-      margin-bottom: 40px;
-      z-index: 1;
-    }
-
-    @keyframes fadeInOut {
-      0%   { opacity: 0; }
-      10%  { opacity: 1; }
-      90%  { opacity: 1; }
-      100% { opacity: 0; }
-    }
-
-    .fade {
-      animation-name: fadeInOut;
-      animation-fill-mode: forwards;
-      animation-timing-function: ease-in-out;
-    }
-
-    #overlayPage {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: none;
-      z-index: 2;
-    }
-  </style>
-</head>
-<body>
-  <div id="message"></div>
-  <iframe id="overlayPage"></iframe>
-
-  <script>
-    const texts = [
-      "Woah! what a nice song!",
-      "favorite mo talaga yan noh",
-      "Gandaaa",
-      "🎧🎶✨",
-      "Enjoy the song in the background!☺️",
-      "and",
-      "ang susunod na ay yungg",
-      "mga gustong kong sabihin",
-      "soooo..",
-      "open this message letter",
-      "i made for you!"
-    ];
-
-    const durations = [
-      4500, 4200, 3000, 3800, 3000,
-      3500, 4500, 3500, 3800, 4500, 5000
-    ];
-
-    const messageEl = document.getElementById("message");
-    const overlayPage = document.getElementById("overlayPage");
-
-    let index = 0;
-
-    function showNextMessage() {
-      if (index >= texts.length) {
-        overlayPage.style.display = 'block';
-        overlayPage.src = 'envelope.html'; // Changed to envelope.html
-        return;
-      }
-
-      const text = texts[index];
-      const duration = durations[index];
-
-      messageEl.textContent = text;
-      messageEl.style.animationDuration = duration + 'ms';
-      messageEl.classList.remove('fade');
-      void messageEl.offsetWidth;
-      messageEl.classList.add('fade');
-
-      setTimeout(showNextMessage, duration + 800);
-      index++;
-    }
-
-    window.onload = () => {
-      setTimeout(showNextMessage, 1000);
-    };
-  </script>
-</body>
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+  <meta charset="UTF-8" />  
+  <title>Letter Time!</title>  
+  <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap" rel="stylesheet" />  
+  <style>  
+    * {  
+      margin: 0;  
+      padding: 0;  
+      box-sizing: border-box;  
+    }  
+  
+    html, body {  
+      width: 100%;  
+      height: 100%;  
+      background: linear-gradient(135deg, #ffc0cb, #dda0dd);  
+      display: flex;  
+      flex-direction: column;  
+      align-items: center;  
+      justify-content: center;  
+      font-family: 'Shadows Into Light', cursive;  
+      color: white;  
+      overflow: hidden;  
+      position: relative;  
+    }  
+  
+    #message {  
+      font-size: 1.6rem;  
+      text-align: center;  
+      opacity: 0;  
+      padding: 0 20px;  
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);  
+      margin-bottom: 40px;  
+      z-index: 1;  
+    }  
+  
+    @keyframes fadeInOut {  
+      0%   { opacity: 0; }  
+      10%  { opacity: 1; }  
+      90%  { opacity: 1; }  
+      100% { opacity: 0; }  
+    }  
+  
+    .fade {  
+      animation-name: fadeInOut;  
+      animation-fill-mode: forwards;  
+      animation-timing-function: ease-in-out;  
+    }  
+  
+    #overlayPage {  
+      position: absolute;  
+      top: 0;  
+      left: 0;  
+      width: 100%;  
+      height: 100%;  
+      border: none;  
+      display: none;  
+      z-index: 2;  
+    }  
+  </style>  
+</head>  
+<body>  
+  <div id="message"></div>  
+  <iframe id="overlayPage"></iframe>  
+  <audio id="audioPlayer" src="favsongs/The Only Exception.mp3" autoplay loop></audio>  
+  
+  <script>  
+    const texts = [  
+      "Woah! what a nice song!",  
+      "favorite mo talaga yan noh",  
+      "Gandaaa",  
+      "🎧🎶✨",  
+      "Enjoy the song in the background!☺️",  
+      "and",  
+      "ang susunod na ay yungg",  
+      "mga gustong kong sabihin",  
+      "soooo..",  
+      "open this message letter",  
+      "i made for you!"  
+    ];  
+  
+    const durations = [  
+      4500, 4200, 3000, 3800, 3000,  
+      3500, 4500, 3500, 3800, 4500, 5000  
+    ];  
+  
+    const messageEl = document.getElementById("message");  
+    const overlayPage = document.getElementById("overlayPage");  
+  
+    let index = 0;  
+  
+    function showNextMessage() {  
+      if (index >= texts.length) {  
+        // All messages done, load next HTML  
+        overlayPage.style.display = 'block';  
+        overlayPage.src = 'messageletter.html'; // Auto load this page  
+        return;  
+      }  
+  
+      const text = texts[index];  
+      const duration = durations[index];  
+  
+      messageEl.textContent = text;  
+      messageEl.style.animationDuration = duration + 'ms';  
+      messageEl.classList.remove('fade');  
+      void messageEl.offsetWidth;  
+      messageEl.classList.add('fade');  
+  
+      setTimeout(showNextMessage, duration + 800);  
+      index++;  
+    }  
+  
+    window.onload = () => {  
+      setTimeout(showNextMessage, 1000);  
+    };  
+  </script>  
+</body>  
 </html>
