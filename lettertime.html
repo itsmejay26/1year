@@ -25,7 +25,7 @@
       position: relative;
     }
 
-    message {
+    #message {
       font-size: 1.6rem;
       text-align: center;
       opacity: 0;
@@ -33,6 +33,7 @@
       text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
       margin-bottom: 40px;
       z-index: 1;
+      transition: opacity 0.5s;
     }
 
     @keyframes fadeInOut {
@@ -58,11 +59,22 @@
       display: none;
       z-index: 2;
     }
+
+    .fade-out {
+      animation: fadeOutAll 1s forwards;
+    }
+
+    @keyframes fadeOutAll {
+      to {
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
   <div id="message"></div>
-  <iframe id="overlayPage"></iframe
+  <iframe id="overlayPage"></iframe>
+
   <script>
     const texts = [
       "Woah! what a nice song!",
@@ -90,9 +102,14 @@
 
     function showNextMessage() {
       if (index >= texts.length) {
-        // All messages done, load next HTML
-        overlayPage.style.display = 'block';
-        overlayPage.src = 'envelope.html'; // Auto load this page
+        // Fade everything out before loading the next page
+        document.body.classList.add('fade-out');
+
+        setTimeout(() => {
+          overlayPage.style.display = 'block';
+          overlayPage.src = 'envelope.html';
+        }, 1000); // Wait for fade-out to finish
+
         return;
       }
 
