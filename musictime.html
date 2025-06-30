@@ -57,7 +57,7 @@
       "walang music",
       "so",
       "mag play muna tayo ng fav songs mo",
-      "",
+      "😊🎶",
       "para hindi boring HAHAHS",
       "okk pili ka nalang ng song na gusto mo",
       "enjoyyy!"
@@ -69,14 +69,7 @@
     let index = 0;
 
     function showNextMessage() {
-      if (index >= texts.length) {
-        //  Redirect to musicplayer.html after the final message
-        setTimeout(() => {
-          window.location.href = "musicplayer.html";
-        }, 1000); // delay buffer after last message fades
-        return;
-      }
-
+      if (index >= texts.length) return;
       const text = texts[index];
       const duration = durations[index];
 
