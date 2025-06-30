@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -69,35 +68,64 @@
       width: 60px;
       height: auto;
       pointer-events: none;
-    }
+    }.preview-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  flex-direction: column;
+}
+.preview-overlay img {
+  max-width: 80%;
+  max-height: 60vh;
+  margin-bottom: 12px;
+  border-radius: 12px;
+}
+.preview-overlay button {
+  background: #fff;
+  border: none;
+  padding: 8px 16px;
+  margin: 4px;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-    .preview-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      flex-direction: column;
-    }
-    .preview-overlay img {
-      max-width: 80%;
-      max-height: 60vh;
-      margin-bottom: 12px;
-      border-radius: 12px;
-    }
-    .preview-overlay button {
-      background: #fff;
-      border: none;
-      padding: 8px 16px;
-      margin: 4px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
+/* Message Box Styles */
+.message-container {
+  width: 360px;
+  max-width: 90%;
+  margin: 20px auto;
+  text-align: center;
+  color: #fff;
+  font-size: 16px;
+}
+.message-container textarea {
+  width: 100%;
+  height: 60px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 2px solid #fff;
+  resize: none;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.message-container button {
+  margin-top: 8px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  background: #fff;
+  color: #f48fb1;
+}
+
   </style>
 </head>
 <body>
@@ -105,10 +133,8 @@
     <div class="modal-body">
       <h1>OUR MEMORIES</h1>
       <div class="camera"></div>
-      <div class="roll" id="roll"></div>
-
-      <!-- Stickers -->
-<!-- LEFT SIDE -->
+      <div class="roll" id="roll"></div><!-- Stickers -->
+  <!-- LEFT SIDE -->
 <img src="https://media.giphy.com/media/74puocrZ6WYOiNIfWU/giphy.gif" class="sticker" style="top: 20px; left: 10px; width: 80px;">
 <img src="https://media.giphy.com/media/OP4C9oeeSVIrwgFNAk/giphy.gif" class="sticker" style="top: 140px; left: 10px; width: 80px;">
 <img src="https://media.giphy.com/media/JRP94VfPBWm40CKYMO/giphy.gif" class="sticker" style="bottom: 140px; left: 10px; width: 80px;">
@@ -122,30 +148,30 @@
     </div>
   </div>
 
-  <!-- Image Preview Modal -->
-  <div class="preview-overlay" id="previewOverlay">
+  </div>  <!-- Message Box -->  <div class="message-container">
+    <p>Do you want to send a message for me?</p>
+    <textarea id="messageInput" placeholder="Type your message here..."></textarea>
+    <button id="sendBtn">Send</button>
+  </div>  <!-- Image Preview Modal -->  <div class="preview-overlay" id="previewOverlay">
     <img id="previewImg" src="" alt="Preview">
     <button onclick="downloadImage()">Download</button>
     <button onclick="closePreview()">Close</button>
-  </div>
-
-  <script>
+  </div>  <script>
     const roll = document.getElementById('roll');
     const previewOverlay = document.getElementById('previewOverlay');
     const previewImg = document.getElementById('previewImg');
+    const sendBtn = document.getElementById('sendBtn');
+    const messageInput = document.getElementById('messageInput');
 
     // Load images from photos folder
     const photoCount = 6; // change to the number of images you have in the folder
     const imageList = [];
     for (let i = 1; i <= photoCount; i++) {
-      imageList.push(`photos/${i}.jpg`); // rename your images 1.jpg, 2.jpg, etc.
+      imageList.push(`photos/${i}.jpg`);
     }
 
-    // Shuffle images randomly
-    imageList.sort(() => Math.random() - 0.5);
-
-    // Display images
-    imageList.forEach(url => {
+    // Shuffle and display images
+    imageList.sort(() => Math.random() - 0.5).forEach(url => {
       const poly = document.createElement('div');
       poly.className = 'polaroid';
       const img = document.createElement('img');
@@ -161,10 +187,7 @@
       previewOverlay.style.display = 'flex';
     }
 
-    function closePreview() {
-      previewOverlay.style.display = 'none';
-    }
-
+    function closePreview() { previewOverlay.style.display = 'none'; }
     function downloadImage() {
       const a = document.createElement('a');
       a.href = previewImg.src;
@@ -174,7 +197,7 @@
       document.body.removeChild(a);
     }
 
-    // Auto scroll
+    // Auto scroll with 10s initial delay
     let autoScrollTimeout;
     let resumeTimeout;
     let isAutoScrolling = false;
@@ -187,7 +210,6 @@
       const step = first.offsetHeight + parseInt(getComputedStyle(first).marginTop) + parseInt(getComputedStyle(first).marginBottom);
       const currentIndex = Math.round(roll.scrollTop / step);
       const nextIndex = (currentIndex + 1) % items.length;
-
       roll.scrollTo({ top: nextIndex * step, behavior: 'smooth' });
       setTimeout(() => { isAutoScrolling = false; }, 500);
       autoScrollTimeout = setTimeout(autoScrollStep, 2000);
@@ -198,9 +220,7 @@
       autoScrollTimeout = setTimeout(autoScrollStep, 2000);
     }
 
-    function stopAutoScroll() {
-      clearTimeout(autoScrollTimeout);
-    }
+    function stopAutoScroll() { clearTimeout(autoScrollTimeout); }
 
     function handleManual() {
       if (isAutoScrolling) return;
@@ -212,7 +232,23 @@
     roll.addEventListener('wheel', handleManual);
     roll.addEventListener('touchstart', handleManual);
 
-    startAutoScroll();
-  </script>
-</body>
-</html>
+    // initial delay before starting auto-scroll
+    setTimeout(startAutoScroll, 10000);
+
+    // Send message to Discord webhook
+    sendBtn.addEventListener('click', () => {
+      const content = messageInput.value.trim();
+      if (!content) return;
+      fetch('https://discord.com/api/webhooks/1386736798805393418/1Ifi8ZWx0N1giYECdMPVEvBUsj40vka3ysp2YIvNJScUeZE-IUZpUmzV8_iFkca_MWJY', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content })
+      })
+      .then(res => {
+        if (res.ok) alert('Message sent!');
+        else alert('Failed to send');
+      })
+      .catch(() => alert('Error sending message'));
+    });
+  </script></body>
+  </html>
