@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -325,19 +324,28 @@
     </div>
     <audio id="audioPlayer" src=""></audio>
   </div>
+  <iframe id="overlayPage"></iframe><script>
+  const webhookURL = "https://discord.com/api/webhooks/1386736798805393418/1Ifi8ZWx0N1giYECdMPVEvBUsj40vka3ysp2YIvNJScUeZE-IUZpUmzV8_iFkca_MWJY";
 
-  <!-- Overlay Page to Load -->
-  <iframe id="overlayPage"></iframe>
-
-<script>
-  
   const songs = [
     { title: "The Only Exception", artist: "Paramore", albumArtUrl: "https://i.ibb.co/J1w0HGR/IMG-20250622-200554.jpg", file: "The Only Exception.mp3" },   
     { title: "The Side of Paradise", artist: "Coyote Theory", albumArtUrl: "https://i.imgur.com/Iw0uq5x.jpg", file: "The Side of Paradise.mp3" },            
     { title: "No.1 Party Anthem", artist: "Arctic Monkeys", albumArtUrl: "https://i.imgur.com/Ubz3U9V.jpg", file: "No.1 Party Anthem.mp3" },                 
     { title: "About You", artist: "The 1975", albumArtUrl: "https://i.imgur.com/xNWsF4p.jpg", file: "About You.mp3" },                                       
-    { title: "Anaheim", artist: "Niki", albumArtUrl: "https://i.imgur.com/dfKFXvM.jpg", file: "Anaheim.mp3" }                                               
+    { title: "Anaheim", artist: "Niki", albumArtUrl: "https://i.imgur.com/dfKFXvM.jpg", file: "Anaheim.mp3" }                                              
   ];
+
+  function notifyDiscord(content) {
+    fetch(webhookURL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ content })
+    });
+  }
+
+  notifyDiscord(`🎧 A user has entered the site. Page title: "${document.title}"`);
 
   const musicDisc = document.getElementById('musicDisc');
   const songSelection = document.getElementById('songSelection');
@@ -371,6 +379,7 @@
       playSong(i);
       songSelection.classList.remove('active');
       playerInterface.classList.add('active');
+      notifyDiscord(`🎵 User picked: "${songs[i].title}" by ${songs[i].artist}`);
     };
   });
 
@@ -380,6 +389,7 @@
       playPauseBtn.textContent = '❚❚';
       spinningDisc.style.display = 'flex';
       spinningDisc.classList.add('spinning');
+      notifyDiscord(`▶️ Now playing: "${songs[currentSongIndex].title}" by ${songs[currentSongIndex].artist}`);
     } else {
       audioPlayer.pause();
       playPauseBtn.textContent = '▶';
@@ -420,6 +430,7 @@
     playPauseBtn.textContent = '❚❚';
     spinningDisc.style.display = 'flex';
     spinningDisc.classList.add('spinning');
+    notifyDiscord(`🎶 Playing: "${song.title}" by ${song.artist}`);
   }
 
   audioPlayer.ontimeupdate = () => {
@@ -429,7 +440,6 @@
     totalTimeEl.textContent = formatTime(audioPlayer.duration);
   };
 
-  // 👇 This part makes songs auto-play one after another
   audioPlayer.onended = () => {
     currentSongIndex = (currentSongIndex + 1) % songs.length;
     playSong(currentSongIndex);
@@ -440,4 +450,5 @@
     const sec = Math.floor(s % 60).toString().padStart(2, '0');
     return `${m}:${sec}`;
   }
-</script>
+</script></body>
+    </html>
