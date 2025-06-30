@@ -12,7 +12,7 @@
     html, body {
       height: 100%;
       margin: 0;
-      background: linear-gradient(135deg, #ffc0cb, #dda0dd);
+      background: linear-gradient(135deg, #ffc0cb, #dda0dd); /* 💖 matches intro */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -21,7 +21,7 @@
     .fade-container {
       opacity: 0;
       transition: opacity 1s ease;
-      background: inherit;
+      background: inherit; /* 💡 match background on fade-in/out */
     }
 
     .fade-in {
@@ -124,7 +124,7 @@
   <div class="fade-container" id="fadeWrap">
     <div class="lock-container">
       <div class="lock-header">
-        <button onclick="window.close()"></button>
+        <button onclick="window.close()">✕</button>
       </div>
       <div class="lock-body">
         <div class="left-side">
@@ -142,9 +142,9 @@
             <button onclick="press('7')">7</button>
             <button onclick="press('8')">8</button>
             <button onclick="press('9')">9</button>
-            <button onclick="clearEntry()"></button>
+            <button onclick="clearEntry()">⌫</button>
             <button onclick="press('0')">0</button>
-            <button onclick="submitCode()"></button>
+            <button onclick="submitCode()">↵</button>
           </div>
         </div>
       </div>
@@ -159,7 +159,7 @@
       wrap.classList.add('fade-out');
 
       setTimeout(() => {
-        window.location.href = 'musictime.html';
+        window.location.href = 'final-surprise.html'; // Adjust as needed
       }, 1000);
     };
 
@@ -178,7 +178,7 @@
 
     function updateDisplay() {
       const disp = document.getElementById('display');
-      disp.textContent = entry ? '�'.repeat(entry.length) : 'Enter Passcode';
+      disp.textContent = entry ? '•'.repeat(entry.length) : 'Enter Passcode';
     }
 
     function submitCode() {
@@ -186,7 +186,7 @@
       if (entry === CORRECT_CODE) {
         ON_SUCCESS();
       } else {
-        disp.textContent = 'Wrong, Try Again!';
+        disp.textContent = 'Wrong, Try Again!😝';
         setTimeout(() => {
           entry = '';
           updateDisplay();
@@ -194,6 +194,7 @@
       }
     }
 
+    // Fade in on load
     window.onload = () => {
       document.getElementById('fadeWrap').classList.add('fade-in');
     };
