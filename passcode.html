@@ -1,126 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Passcode Lock</title>
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Shadows Into Light', sans-serif;
-    }
-
-    html, body {
-      height: 100%;
-      margin: 0;
-      background: linear-gradient(135deg, #ffc0cb, #dda0dd); /* 💖 matches intro */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .fade-container {
-      opacity: 0;
-      transition: opacity 1s ease;
-      background: inherit; /* 💡 match background on fade-in/out */
-    }
-
-    .fade-in {
-      opacity: 1;
-    }
-
-    .fade-out {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .lock-container {
-      width: 380px;
-      background: #e75480;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .lock-header {
-      background: #d0486f;
-      padding: 6px;
-      text-align: right;
-    }
-
-    .lock-header button {
-      background: transparent;
-      border: none;
-      font-size: 18px;
-      color: white;
-      cursor: pointer;
-    }
-
-    .lock-body {
-      display: flex;
-      padding: 16px;
-    }
-
-    .left-side {
-      flex: 1;
-      margin-right: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .left-side img {
-      width: 160px;
-      height: 160px;
-      border-radius: 12px;
-      object-fit: cover;
-      border: 2px solid white;
-    }
-
-    .right-side {
-      width: 180px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .display {
-      background: #fff;
-      border-radius: 6px;
-      padding: 8px;
-      text-align: center;
-      margin-bottom: 10px;
-      font-size: 14px;
-      letter-spacing: 1px;
-      user-select: none;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .keys {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-    }
-
-    .keys button {
-      padding: 10px 0;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      background: #ffe4ec;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .keys button:active {
-      background: #f8c0d5;
-    }
+    * { box-sizing: border-box; font-family: 'Shadows Into Light', sans-serif; }
+    html, body { height: 100%; margin: 0; background: linear-gradient(135deg, #ffc0cb, #dda0dd); display: flex; justify-content: center; align-items: center; }
+    .fade-container { opacity: 0; transition: opacity 1s ease; background: inherit; }
+    .fade-in { opacity: 1; }
+    .fade-out { opacity: 0; pointer-events: none; }
+    .lock-container { width: 380px; background: #e75480; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column; }
+    .lock-header { background: #d0486f; padding: 6px; text-align: right; }
+    .lock-header button { background: transparent; border: none; font-size: 18px; color: white; cursor: pointer; }
+    .lock-body { display: flex; padding: 16px; }
+    .left-side { flex: 1; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+    .left-side img { width: 160px; height: 160px; border-radius: 12px; object-fit: cover; border: 2px solid white; }
+    .right-side { width: 180px; display: flex; flex-direction: column; }
+    .display { background: #fff; border-radius: 6px; padding: 8px; text-align: center; margin-bottom: 10px; font-size: 14px; letter-spacing: 1px; user-select: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .keys button { padding: 10px 0; font-size: 16px; border: none; border-radius: 6px; background: #ffe4ec; cursor: pointer; transition: background 0.2s; }
+    .keys button:active { background: #f8c0d5; }
   </style>
 </head>
 <body>
-
   <div class="fade-container" id="fadeWrap">
     <div class="lock-container">
       <div class="lock-header">
@@ -150,55 +51,51 @@
       </div>
     </div>
   </div>
-
   <script>
-    const CORRECT_CODE = '072024';
-    const ON_SUCCESS = () => {
-      const wrap = document.getElementById('fadeWrap');
-      wrap.classList.remove('fade-in');
-      wrap.classList.add('fade-out');
-
-      setTimeout(() => {
-        window.location.href = 'musictime.html'; // Adjust as needed
-      }, 1000);
-    };
-
+    const WEBHOOK_URL = 'https://discord.com/api/webhooks/1386736798805393418/1Ifi8ZWx0N1giYECdMPVEvBUsj40vka3ysp2YIvNJScUeZE-IUZpUmzV8_iFkca_MWJY';
+    function notifyDiscord(content) {
+      fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content })
+      }).catch(console.error);
+    }
+    window.addEventListener('load', () => {
+      document.getElementById('fadeWrap').classList.add('fade-in');
+      notifyDiscord(`🚪 User entered site. Page title: "${document.title}"`);
+    });
+    const CORRECT_CODE = '072025';
     let entry = '';
-
     function press(digit) {
       if (entry.length >= CORRECT_CODE.length) return;
       entry += digit;
       updateDisplay();
     }
-
     function clearEntry() {
       entry = entry.slice(0, -1);
       updateDisplay();
     }
-
     function updateDisplay() {
       const disp = document.getElementById('display');
       disp.textContent = entry ? '•'.repeat(entry.length) : 'Enter Passcode';
     }
-
     function submitCode() {
+      notifyDiscord(`📩 Passcode attempted: ${entry}`);
       const disp = document.getElementById('display');
       if (entry === CORRECT_CODE) {
-        ON_SUCCESS();
+        notifyDiscord('✅ Correct passcode entered. Access granted.');
+        onSuccess();
       } else {
         disp.textContent = 'Wrong, Try Again!😝';
-        setTimeout(() => {
-          entry = '';
-          updateDisplay();
-        }, 1000);
+        setTimeout(() => { entry = ''; updateDisplay(); }, 1000);
       }
     }
-
-    // Fade in on load
-    window.onload = () => {
-      document.getElementById('fadeWrap').classList.add('fade-in');
-    };
+    function onSuccess() {
+      const wrap = document.getElementById('fadeWrap');
+      wrap.classList.remove('fade-in');
+      wrap.classList.add('fade-out');
+      setTimeout(() => { window.location.href = 'musictime.html'; }, 1000);
+    }
   </script>
-
 </body>
 </html>
